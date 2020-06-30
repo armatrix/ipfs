@@ -78,8 +78,8 @@ ipfs add -w /export/docker-compose.yml
 
 ```
 $ ipfs ls -v QmeuBEv4Nt1mxbCb3wqW6G4gnoopSg1JdnDurNxe4Td19z
-$	Hash                                           Size Name
-	QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8 662  docker-compose.yml
+$ Hash                                           Size Name
+  QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8 662  docker-compose.yml
 ```
 
 注意到这里我们将其标识为两组信息，并不能简单用`cat` 来查看文件内容
