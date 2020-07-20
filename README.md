@@ -11,10 +11,10 @@ export ipfs_staging="$HOME/docker-volume/ipfs-staging"
 启动docker
 
 ```shell
-docker run -d --name ipfs_host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 8080:8080 -p 5001:5001 ipfs/go-ipfs:latest
+docker run -d --name ipfs-host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 8080:8080 -p 5001:5001 ipfs/go-ipfs:latest
 ```
 
-通过`docker logs -f ipfs_host` 查看日志 echo:
+通过`docker logs -f ipfs-host` 查看日志 echo:
 
 ```shell
 Changing user to ipfs
@@ -51,13 +51,13 @@ Daemon is ready
 执行上面的命令
 
 ```shell
-docker exec ipfs_host ipfs cat /ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme
+docker exec ipfs-host ipfs cat /ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme
 ```
 
 查看对等节点
 
 ```shell
-docker exec ipfs_host ipfs swarm peers
+docker exec ipfs-host ipfs swarm peers
 ```
 
 可以通过5051端口暴露的服务来简单的操作，下面演示一些基本命令的使用
@@ -68,18 +68,18 @@ docker exec ipfs_host ipfs swarm peers
 # 将一个文件添加到宿主机目录  -r  recursion
 cp docker-compose.yml $ipfs_staging
 # 添加到ipfs中
-docker exec ipfs_host ipfs add /export/docker-compose.yml
+docker exec ipfs-host ipfs add /export/docker-compose.yml
 ```
 
 通过 `ipfs cat <CID>` 查看文件内容
 
 ```shell
-docker exec ipfs_host ipfs cat QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8
+docker exec ipfs-host ipfs cat QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8
 ```
 
 可以验证修改文件名等操作，并不会改变存储内容的的文件名（标识信息），如果我们想获取追踪这些信息，通过增加Warpped信息来标识
 
-（以下操作将`docker exec ipfs_host ipfs` alias 成 ipfs` 方便在宿主机操作）
+（以下操作将`docker exec ipfs-host ipfs` alias 成 ipfs` 方便在宿主机操作）
 
 ```shell
 ipfs add -w /export/docker-compose.yml
