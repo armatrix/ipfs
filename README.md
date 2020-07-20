@@ -1,11 +1,20 @@
 # ipfs
-`export ipfs_data="/Users/aaron/data_ipfs"`
 
-`export ipfs_staging="/Users/aaron/data"`
+创建docker挂载目录，并配置临时环境变量
 
-`docker run -d --name ipfs_host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 8080:8080 -p 5001:5001 ipfs/go-ipfs:latest`
+```shell
+mkdir -p $HOME/docker-volume/ipfs-data $HOME/docker-volume/ipfs-staging
+export ipfs_data="$HOME/docker-volume/ipfs-data"
+export ipfs_staging="$HOME/docker-volume/ipfs-staging"
+```
 
-通过`docker logs -f ipfs_host` 查看日志
+启动docker
+
+```shell
+docker run -d --name ipfs_host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 8080:8080 -p 5001:5001 ipfs/go-ipfs:latest
+```
+
+通过`docker logs -f ipfs_host` 查看日志 echo:
 
 ```shell
 Changing user to ipfs
@@ -41,19 +50,21 @@ Daemon is ready
 
 执行上面的命令
 
-```
+```shell
 docker exec ipfs_host ipfs cat /ipfs/QmQPeNsJPyVWPFDVHb77w8G42Fvo15z4bG2X8D2GhfbSXc/readme
 ```
 
 查看对等节点
 
-```
+```shell
 docker exec ipfs_host ipfs swarm peers
 ```
 
+可以通过5051端口暴露的服务来简单的操作，下面演示一些基本命令的使用
+
 将文件放入关联到docker目录并添加到ipfs中
 
-```
+```shell
 # 将一个文件添加到宿主机目录  -r  recursion
 cp docker-compose.yml $ipfs_staging
 # 添加到ipfs中
@@ -62,7 +73,7 @@ docker exec ipfs_host ipfs add /export/docker-compose.yml
 
 通过 `ipfs cat <CID>` 查看文件内容
 
-```
+```shell
 docker exec ipfs_host ipfs cat QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8
 ```
 
@@ -70,22 +81,24 @@ docker exec ipfs_host ipfs cat QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8
 
 （以下操作将`docker exec ipfs_host ipfs` alias 成 ipfs` 方便在宿主机操作）
 
-```
+```shell
 ipfs add -w /export/docker-compose.yml
 ```
 
 这里会返回两个CID，第一个可以看到与之前的相同，当我们通过`ipfs ls -v <cid>`来查看时，显示`Hash` 和 `Size Name` 均为空，但当我们通过返回的第二个CID来查看以后，则提供了更多的信息：
 
-```
+```shell
 $ ipfs ls -v QmeuBEv4Nt1mxbCb3wqW6G4gnoopSg1JdnDurNxe4Td19z
+# echo
 $ Hash                                           Size Name
   QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8 662  docker-compose.yml
 ```
 
 注意到这里我们将其标识为两组信息，并不能简单用`cat` 来查看文件内容
 
-```
+```shell
 $ ipfs cat QmeuBEv4Nt1mxbCb3wqW6G4gnoopSg1JdnDurNxe4Td19z
+# echo
 $ Error: this dag node is a directory
 ```
 
@@ -97,8 +110,9 @@ $ Error: this dag node is a directory
 
 将文件发布到网络
 
-```
+```shell
 $ ipfs name publish QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8
+# echo
 $ Published to QmXsxFFwDZYTXNMHLR5cH2AY1esLLSBm8N8CdEwgYKmgUk: /ipfs/QmbJniEGEvCF54REqzCguU8MA4QUa3LAAN8VLkzpLQTjp8
 ```
 
