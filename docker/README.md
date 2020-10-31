@@ -3,15 +3,15 @@
 创建docker挂载目录，并配置临时环境变量
 
 ```shell
-mkdir -p $HOME/docker-volume/ipfs-data $HOME/docker-volume/ipfs-staging
+mkdir -p $HOME/docker-volume/ipfs-data $HOME/docker-volume/ipfs-repo
 export ipfs_data="$HOME/docker-volume/ipfs-data"
-export ipfs_staging="$HOME/docker-volume/ipfs-staging"
+export ipfs_repo="$HOME/docker-volume/ipfs-repo"
 ```
 
 启动docker
 
 ```shell
-docker run -d --name ipfs-host -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 8080:8080 -p 5001:5001 ipfs/go-ipfs:latest
+ docker run --name ipfs-host  -v /home/ubuntu/docker-volume/ipfs-repo:/~/.ipfs  -v $ipfs_staging:/export -v $ipfs_data:/data/ipfs -p 4001:4001 -p 8080:8080 -p 5001:5001 ipfs/go-ipfs:latest
 ```
 
 通过`docker logs -f ipfs-host` 查看日志 echo:

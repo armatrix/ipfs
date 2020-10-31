@@ -1,10 +1,13 @@
 package main
 
-import logging "github.com/ipfs/go-log/v2"
+import (
+	"github.com/armatrix/ipfs/go-log/level"
+	logging "github.com/ipfs/go-log/v2"
+)
 
 func main() {
 	var log = logging.Logger("main")
-
+	level.Lv()
 	log.Debug("debug")
 	log.Info("info")
 	log.Warn("warn")
